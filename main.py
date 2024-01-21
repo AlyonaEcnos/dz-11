@@ -12,7 +12,7 @@ class Field:
     @value.setter
     def value(self, new_value):
         if not self.is_valid(new_value):
-            raise ValueError(f"Недопустимое значение для {self.__class__.__name__.lower()}")
+            raise ValueError(f"Invalid number for {self.__class__.__name__.lower()}")
         self.__value = new_value
 
     def __str__(self):
