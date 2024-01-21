@@ -3,9 +3,17 @@ from collections import UserDict
 
 class Field:
     def __init__(self, value):
-        if not self.is_valid(value):
-            raise ValueError(f"Invalid {self.__class__.__name__.lower()} value")
         self.value = value
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, new_value):
+        if not self.is_valid(new_value):
+            raise ValueError(f"Недопустимое значение для {self.__class__.__name__.lower()}")
+        self._value = new_value
 
     def __str__(self):
         return str(self.value)
@@ -22,7 +30,11 @@ class Phone(Field):
 
 class Birthday(Field):
     def is_valid(self, value):        
-        return True
+        try:
+            datetime.strptime(value, "%Y-%m-%d")
+            return True
+        except ValueError:
+            return False
 
 class Record:
     def __init__(self, name, birthday=None):
