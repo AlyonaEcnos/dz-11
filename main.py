@@ -3,17 +3,17 @@ from collections import UserDict
 
 class Field:
     def __init__(self, value):
-        self.value = value
+        self.__value = value
 
     @property
     def value(self):
-        return self._value
+        return self.__value
 
     @value.setter
     def value(self, new_value):
         if not self.is_valid(new_value):
             raise ValueError(f"Недопустимое значение для {self.__class__.__name__.lower()}")
-        self._value = new_value
+        self.__value = new_value
 
     def __str__(self):
         return str(self.value)
