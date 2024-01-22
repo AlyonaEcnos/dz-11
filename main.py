@@ -25,22 +25,44 @@ class Field:
 
 
 class Name(Field):
-    pass
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        if not self.is_valid(new_value):
+            raise ValueError(f"Invalid value for {self.__class__.__name__.lower()}")
+        self.__value = new_value
 
 
 class Phone(Field):
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, new_value):
+        if not self.is_valid(new_value):
+            raise ValueError(f"Invalid value for {self.__class__.__name__.lower()}")
+        self.__value = new_value
+
     def is_valid(self, value):
         return isinstance(value, str) and len(value) == 10 and value.isdigit()
 
 
 class Birthday(Field):
-    def is_valid(self, value):        
-        try:
-            datetime.strptime(value, "%Y-%m-%d")
-            return True
-        except ValueError:
-            return False
+    @property
+    def value(self):
+        return self.__value
 
+    @value.setter
+    def value(self, new_value):
+        try:
+            datetime.strptime(new_value, "%Y-%m-%d")
+            self.__value = new_value
+        except ValueError:
+            raise ValueError(f"Invalid value for {self.__class__.__name__.lower()}")
 
 class Record:
     def __init__(self, name, birthday=None):
@@ -84,7 +106,6 @@ class Record:
             return days_left
         else:
             return None
-
 
 class AddressBook(UserDict):
     def add_record(self, record):
