@@ -3,6 +3,8 @@ from collections import UserDict
 
 class Field:
     def __init__(self, value):
+        if not self.is_valid(value):
+            raise ValueError(f"Invalid value for {self.__class__.__name__.lower()}")
         self.__value = value
 
     @property
@@ -12,21 +14,24 @@ class Field:
     @value.setter
     def value(self, new_value):
         if not self.is_valid(new_value):
-            raise ValueError(f"Invalid number for {self.__class__.__name__.lower()}")
+            raise ValueError(f"Invalid value for {self.__class__.__name__.lower()}")
         self.__value = new_value
 
     def __str__(self):
         return str(self.value)
 
     def is_valid(self, value):
-        return True
+        return isinstance(value, (int, float, str))
+
 
 class Name(Field):
     pass
 
+
 class Phone(Field):
     def is_valid(self, value):
         return isinstance(value, str) and len(value) == 10 and value.isdigit()
+
 
 class Birthday(Field):
     def is_valid(self, value):        
@@ -35,6 +40,7 @@ class Birthday(Field):
             return True
         except ValueError:
             return False
+
 
 class Record:
     def __init__(self, name, birthday=None):
@@ -78,6 +84,7 @@ class Record:
             return days_left
         else:
             return None
+
 
 class AddressBook(UserDict):
     def add_record(self, record):
